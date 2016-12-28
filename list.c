@@ -85,7 +85,7 @@ static void _insert_after(struct node **t_node, unsigned int _after, unsigned in
 }
 
 static void _insert_begin(struct node **t_node, unsigned int data) {
-	struct node *head, *tail;
+	struct node *head, *tail, *tmp;
 
 	head = (*t_node);
 
@@ -97,6 +97,8 @@ static void _insert_begin(struct node **t_node, unsigned int data) {
 	(*t_node)->next->next = head;
 
 	tail = (*t_node);
+
+	tmp = (*t_node)->next;
 
 	while ( 1 ) {
 		if ( (*t_node)->prev == tail ) {
@@ -110,9 +112,26 @@ static void _insert_begin(struct node **t_node, unsigned int data) {
 		(*t_node) = (*t_node)->prev;
 	}
 
-	//printf("t_node: %p, t_node->prev: %p, t_node->next: %p, t_node->data: %u\n", (*t_node), (*t_node)->prev, (*t_node)->next, (*t_node)->data);
-
 	head->data = data;
+	head->prev = tmp;
+
+	(*t_node) = head;
+}
+
+static void _insert_end(struct node **t_node, unsigned int data) {
+	struct node *head;
+
+	head = (*t_node);
+
+	(*t_node) = (*t_node)->prev;
+
+	_alloc_node(&(*t_node)->next);
+
+	(*t_node)->next->data = data;
+	(*t_node)->next->prev = (*t_node);
+	(*t_node)->next->next = head;
+
+	head->prev = (*t_node)->next;
 
 	(*t_node) = head;
 }
@@ -134,6 +153,8 @@ static void _print_overall_node(struct node **t_node) {
 
 		(*t_node) = (*t_node)->next;
 	}
+
+	(*t_node) = head;
 #endif
 }
 
@@ -146,6 +167,8 @@ int main(void) {
 
 	_insert_after(&t_node, 1337, 400);
 	_insert_begin(&t_node, 4141);
+
+	_insert_end(&t_node, 4242);
 
 	_print_overall_node(&t_node);
 
