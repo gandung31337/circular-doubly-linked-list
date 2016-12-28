@@ -1,1 +1,3 @@
-# circular-doubly-linked-list
+# Circular Doubly Linked-List
+
+Implementasi 'circular doubly linked-list' pake C
